@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import { userService } from '../user.service'
+import { userService } from './user.service'
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const user = req.body
+    const { user: userData } = req.body
 
-    const result = await userService.createUserDB(user)
+    const result = await userService.createUserDB(userData)
 
     res.status(200).json({
       success: true,
@@ -17,6 +17,21 @@ const createUser = async (req: Request, res: Response) => {
   }
 }
 
+const getAllUsersFromDB = async (req: Request, res: Response) => {
+  try {
+    const result = await userService.getAllUsersFromDB()
+
+    res.status(200).json({
+      success: true,
+      message: 'Users fetched successfully!',
+      data: result,
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export const userController = {
   createUser,
+  getAllUsersFromDB,
 }
