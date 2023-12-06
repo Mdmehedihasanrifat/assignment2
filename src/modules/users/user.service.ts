@@ -1,4 +1,3 @@
-import express from 'express'
 import { User } from './user.interface'
 import { UserModel } from './user.model'
 

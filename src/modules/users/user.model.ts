@@ -1,4 +1,4 @@
-import { Schema, model, connect } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { Address, FullName, Order, User } from './user.interface'
 
 const FullNameSchema = new Schema<FullName>({
@@ -19,12 +19,12 @@ const orderSchema = new Schema<Order>({
 })
 
 const userSchema = new Schema<User>({
-  userId: { type: Number, required: true },
-  username: { type: String, required: true },
+  userId: { type: Number, required: true, unique: true },
+  username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   fullName: { type: FullNameSchema, required: true },
   age: { type: Number, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   isActive: { type: Boolean, required: true },
   hobbies: { type: [String], required: true },
   address: { type: addressSchema, required: true },

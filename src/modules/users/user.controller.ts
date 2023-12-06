@@ -3,7 +3,19 @@ import { userService } from './user.service'
 
 const createUser = async (req: Request, res: Response) => {
   try {
+    //joi validation
+
     const { user: userData } = req.body
+    // joi validate data
+    const { error, value } = userSchemaValidation.validate(userData)
+
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: 'something went wrong',
+        error: error.details,
+      })
+    }
 
     const result = await userService.createUserDB(userData)
 
