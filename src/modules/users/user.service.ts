@@ -33,8 +33,14 @@ const getSingleUserFromDB = async (userId: string) => {
     }
   }
 }
+const getDeleteUserFromDB = async (userId: string) => {
+  const result = await User.updateOne({ userId }, { isDeleted: true })
+
+  return result
+}
 export const userService = {
   createUserDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
+  getDeleteUserFromDB,
 }

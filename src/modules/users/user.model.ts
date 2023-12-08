@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose'
 import { TAddress, TFullName, TOrder, TUser, UserModel } from './user.interface'
+import config from '../../app/config'
+import bcrypt from 'bcrypt'
 
 const FullNameSchema = new Schema<TFullName>({
   firstName: { type: String, required: true },
@@ -29,8 +31,28 @@ const userSchema = new Schema<TUser, UserModel>({
   hobbies: { type: [String], required: true },
   address: { type: addressSchema, required: true },
   orders: { type: [orderSchema] },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 })
 
+//middleware
+
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_round)
+  )
+  next()
+})
+userSchema.post('save', function () {})
+
+userSchema.pre('find', function () {})
+
+// static check user exists or not
 userSchema.statics.isUserExists = async function (id: string) {
   const existUser = await this.findOne({ userId: id })
 
