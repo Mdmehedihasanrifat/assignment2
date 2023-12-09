@@ -38,9 +38,34 @@ const getDeleteUserFromDB = async (userId: string) => {
 
   return result
 }
+// const updateUserFromDB = async (userId: string, updatedUserData: TUser) => {
+//   const result = await User.updateOne({ userId }, { updatedUserData })
+
+//   return result
+// }
+
+const updateUserFromDB = async (userId: string, updatedUserData: TUser) => {
+  const user = await User.isUserExists(userId)
+
+  if (!user) {
+    throw {
+      success: true,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    }
+  }
+
+  await User.updateUser(userId, updatedUserData)
+
+  return user
+}
 export const userService = {
   createUserDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
   getDeleteUserFromDB,
+  updateUserFromDB,
 }

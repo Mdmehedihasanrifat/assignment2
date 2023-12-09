@@ -50,12 +50,39 @@ userSchema.pre('save', async function (next) {
 })
 userSchema.post('save', function () {})
 
-userSchema.pre('find', function () {})
+userSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } })
+  next()
+})
+userSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } })
+  next()
+})
 
 // static check user exists or not
 userSchema.statics.isUserExists = async function (id: string) {
   const existUser = await this.findOne({ userId: id })
 
   return existUser
+}
+
+userSchema.statics.updateUser = async function (
+  userId: string,
+  updatedUserData: Partial<TUser>
+) {
+  // Find the user by userId
+  const user = await this.findOne({ userId })
+
+  if (!user) {
+    return null
+  }
+
+  if (updatedUserData) {
+    user.set(updatedUserData)
+  }
+
+  await user.save()
+
+  return user
 }
 export const User = model<TUser, UserModel>('User', userSchema)

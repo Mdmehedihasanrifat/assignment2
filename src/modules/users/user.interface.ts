@@ -27,6 +27,7 @@ export type TUser = {
   address: TAddress
   orders: TOrder[]
   isDeleted: boolean
+  // updateUser: (updatedUserData: Partial<TUser>) => Promise<Model<TUser> | null>
 }
 
 // export type UserMethods = {
@@ -35,5 +36,10 @@ export type TUser = {
 
 export interface UserModel extends Model<TUser> {
   isUserExists(id: string): Promise<TUser | null>
+  updateUser(
+    userId: string,
+    updatedUserData: Partial<TUser>
+  ): Promise<TUser | null>
 }
+
 // export type UserModel = Model<TUser, Record<string, never>, UserMethods>
