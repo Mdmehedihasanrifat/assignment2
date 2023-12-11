@@ -116,7 +116,7 @@ const getDeleteUserFromDB = async (req: Request, res: Response) => {
     res.status(404).json(err)
   }
 }
-
+// update user From db
 const updateUserFromDb = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
