@@ -34,9 +34,22 @@ const getSingleUserFromDB = async (userId: string) => {
   }
 }
 const getDeleteUserFromDB = async (userId: string) => {
-  const result = await User.updateOne({ userId }, { isDeleted: true })
+  const result = await User.isUserExists(userId)
 
-  return result
+  if (result) {
+    const user = await User.updateOne({ userId }, { isDeleted: true })
+
+    return user
+  } else {
+    throw {
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    }
+  }
 }
 // const updateUserFromDB = async (userId: string, updatedUserData: TUser) => {
 //   const result = await User.updateOne({ userId }, { updatedUserData })
@@ -60,7 +73,8 @@ const updateUserFromDB = async (userId: string, updatedUserData: TUser) => {
 
   await User.updateUser(userId, updatedUserData)
 
-  return user
+  const updatedUser = await User.isUserExists(userId)
+  return updatedUser
 }
 export const userService = {
   createUserDB,
