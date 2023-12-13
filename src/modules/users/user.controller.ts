@@ -109,8 +109,8 @@ const getDeleteUserFromDB = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'Delete successfully!',
-      data: result,
+      message: 'User Delete successfully!',
+      data: null,
     })
   } catch (err) {
     res.status(404).json(err)
